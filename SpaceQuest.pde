@@ -10,7 +10,8 @@ private int starCooldown = 0;
 private int starInterval = 10;
 
 void setup() {
-  size(500, 800);
+  fullScreen();
+  noCursor();
   background(0);
   spawnShip();
 }
