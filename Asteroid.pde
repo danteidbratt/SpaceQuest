@@ -4,8 +4,8 @@ final class Asteroid extends Thing implements Vulnerable, Destructive {
   private boolean hasLanded;
   private final int deathSize;
 
-  protected Asteroid(int size, Position position, int damage, int deathSize) {
-    super(size, position);
+  protected Asteroid(int size, Coordinates coordinates, color kolor, int speed, float direction, int damage, int deathSize) {
+    super(size, coordinates, kolor, speed, direction);
     this.damage = damage;
     this.deathSize = deathSize;
     this.hasLanded = false;
@@ -14,6 +14,14 @@ final class Asteroid extends Thing implements Vulnerable, Destructive {
   public void takeDamage(int damage) {
     int newSize = size -= damage;
     setSize(newSize);
+  }
+  
+  public boolean isDead() {
+    return size <= deathSize || hasLanded();
+  }
+  
+  public boolean isHitBy(Destructive destructive) {
+    return overlapsWith(destructive.getHost());
   }
   
   public void inflictDamage(Vulnerable hero) {
@@ -28,17 +36,12 @@ final class Asteroid extends Thing implements Vulnerable, Destructive {
   public boolean hasLanded() {
     return this.hasLanded;
   }
-
-  public boolean isDead() {
-    return size <= deathSize || hasLanded();
+  
+  public Thing getHost() {
+    return this;
   }
   
   public boolean shouldBeRemoved() {
     return isDead() || hasLanded();
-  }
-
-  public void drawThing() {
-    fill(255, 0, 0);
-    super.drawThing();
   }
 }

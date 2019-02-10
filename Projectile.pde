@@ -3,14 +3,9 @@ final class Projectile extends Thing implements Destructive {
   private final int damage;
   private boolean hasLanded;
   
-  public Projectile(Position position, int damage, int speed, int direction) {
-    super(10, new Position(position.getX(), position.getY(), speed, direction));
+  public Projectile(Coordinates coordinates, color kolor, int damage, int speed, float direction) {
+    super(10, coordinates, kolor, speed, direction);
     this.damage = damage;
-  }
-  
-  public void drawThing() {
-    fill(255);
-    ellipse(position.getX(), position.getY(), size, size);
   }
   
   public void inflictDamage(Vulnerable asteroid) {
@@ -30,7 +25,7 @@ final class Projectile extends Thing implements Destructive {
     return hasLanded;
   }
   
-  
-  
-  
+  public Thing getHost() {
+    return this;
+  }
 }

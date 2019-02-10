@@ -1,11 +1,7 @@
 final class Star extends Thing {
   
-  public Star(int size, Position position) {
-    super(size, position);
+  public Star(int size, Coordinates coordinates, color kolor, int speed, float direction) {
+    super(size, coordinates, kolor, speed, direction);
   }
   
-  public void drawThing() {
-    fill(255);
-    super.drawThing();
-  }
 }

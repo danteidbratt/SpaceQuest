@@ -5,8 +5,6 @@ interface Armed {
   
   boolean isFiring();
   
-  void applyCooldown();
-  
    boolean isReadyToFire();
   
   Projectile fire();

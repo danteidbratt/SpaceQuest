@@ -1,5 +1,9 @@
 final class Ship extends Thing implements Vulnerable, Armed {
 
+  private int up = 0;
+  private int down = 0;
+  private int left = 0;
+  private int right = 0;
   private int health;
   private int fireDamage;
   private int fireVelocity;
@@ -9,8 +13,8 @@ final class Ship extends Thing implements Vulnerable, Armed {
   private final int reloadTimeDecrement;
   private int cooldown;
 
-  public Ship(int size, Position position, int health, int fireDamage, int fireVelocity, int reloadTime, int minReloadTime, int reloadTimeDecrement) {
-    super(size, position);
+  public Ship(int size, Coordinates coordinates, color kolor, int speed, int health, int fireDamage, int fireVelocity, int reloadTime, int minReloadTime, int reloadTimeDecrement) {
+    super(size, coordinates, kolor, speed);
     this.health = health;
     this.fireDamage = fireDamage;
     this.fireVelocity = fireVelocity;
@@ -21,13 +25,42 @@ final class Ship extends Thing implements Vulnerable, Armed {
     this.firing = false;
   }
 
-  public void setDirection(int direction, boolean trueOrFalse) {
-    position.setDirection(direction, trueOrFalse);
+  public void setDirection(int arrowKey, int onOrOff) {
+    if (arrowKey == UP) {
+      up = onOrOff;
+    } else if (arrowKey == DOWN) {
+      down = onOrOff;
+    } else if (arrowKey == LEFT) {
+      left = onOrOff;
+    } else if (arrowKey == RIGHT) {
+      right = onOrOff;
+    }
+    
+    // coordinates.setDirection(direction);
+    // coordinates.setMoving(horizontal != 0 || vertical != 0);
   }
-
-  public void drawThing() {
-    fill(0, 255, 0);
-    super.drawThing();
+  
+  public void updateCoordinates() {
+    int horizontal = right - left;
+    int vertical = down - up;
+    direction = atan2(horizontal, vertical);
+    moving = horizontal != 0 || vertical != 0;
+    super.updateCoordinates();
+  }
+  
+  public void checkWalls() {
+    if (coordinates.getX() <= radius) {
+      left = 0;
+    }
+    if (coordinates.getX() > width - radius) {
+      right = 0;
+    }
+    if (coordinates.getY() < radius) {
+      up = 0;
+    }
+    if (coordinates.getY() > height - radius) {
+      down = 0;
+    }
   }
 
   public void takeDamage(int damage) {
@@ -36,6 +69,10 @@ final class Ship extends Thing implements Vulnerable, Armed {
 
   public boolean isDead() {
     return health <= 0;
+  }
+  
+  public boolean isHitBy(Destructive destructive) {
+    return overlapsWith(destructive.getHost());
   }
   
   public boolean shouldBeRemoved() {
@@ -56,18 +93,16 @@ final class Ship extends Thing implements Vulnerable, Armed {
     return firing;
   }
 
-  public void applyCooldown() {
-    if (cooldown > 0) {
-      cooldown--;
-    }
-  }
-
   public boolean isReadyToFire() {
-    return cooldown == 0;
+    if (cooldown <= 0) {
+      return true;
+    }
+    cooldown--;
+    return false;
   }
 
   public Projectile fire() {
     cooldown += reloadTime;
-    return new Projectile(getPosition(), fireDamage, fireVelocity, UP);
+    return new Projectile(new Coordinates(coordinates), kolor, fireDamage, fireVelocity, PI);
   }
 }

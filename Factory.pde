@@ -5,29 +5,33 @@ final class Factory {
     int radius = size / 2;
     int x = radius + (int) (random(width - size));
     int y = -radius;
+    Coordinates coordinates = new Coordinates(x, y);
+    color kolor = color(255, 0, 0);
     int speed = 5;
-    Position position = new Position(x, y, speed);
-    position.setDirection(DOWN, true);
+    float direction = 0;
     int damage = 20;
-    int deathSize = 20;
-    return new Asteroid(size, position, damage, deathSize);
+    int deathSize = 50;
+    return new Asteroid(size, coordinates, kolor, speed, direction, damage, deathSize);
   }
 
   public Ship createShip() {
     int size = 30;
     int x = width / 2;
     int y = height - 50;
-    int speed = 8;
-    Position position = new Position(x, y, speed);
+    Coordinates coordinates = new Coordinates(x, y);
+    color kolor = color(255);
+    int speed = 10;
     int health = 100;
-    int fireDamage = 5;
-    int fireVelocity = 10;
-    int reloadTime = 2;
+    int fireDamage = 10;
+    int fireVelocity = 15;
+    int reloadTime = 4;
     int minReloadTime = 0;
     int reloadTimeDecrement = 2;
     return new Ship(
       size, 
-      position, 
+      coordinates,
+      kolor,
+      speed,
       health, 
       fireDamage, 
       fireVelocity, 
@@ -38,13 +42,13 @@ final class Factory {
   }
   
   public Star createStar() {
-    int size = 2;
+    int size = 4;
     int x = (int) random(width);
     int y = 0;
+    Coordinates coordinates = new Coordinates(x, y);
+    color kolor = color(255);
     int speed = 8;
-    int direction = DOWN;
-    Position position = new Position(x, y, speed, direction);
-    return new Star(size, position);
+    int direction = 0;
+    return new Star(size, coordinates, kolor, speed, direction);
   }
-  
 }
